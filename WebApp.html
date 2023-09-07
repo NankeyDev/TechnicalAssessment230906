@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <script>
+      function addRow() {
+        // Get form values
+        var taskName = document.getElementById("taskname").value;
+        var taskDescription = document.getElementById("taskdescription").value;
+        var taskType = document.getElementById("tasktype").value;
+        var taskDueDate = document.getElementById("taskduedate").value;
+        var taskLabel = document.getElementById("tasklabel").value;
+
+        // Add object information to google sheet
+        google.script.run.AddRecord(taskName, taskDescription, taskType, taskDueDate, taskLabel);
+
+        // Clear form values
+        document.getElementById("taskName").value = '';
+      }
+    </script>
+  </head>
+  <body>
+    Name: <input type = "text" id="taskname" />
+    Description: <input type = "text" id="taskdescription" />
+    Type: <input type = "text" id="tasktype" />
+    Due Date: <input type = "text" id="taskduedate" />
+    Label: <input type = "text" id="tasklabel" />
+    <input type = "button" value = "Add" onclick="addRow()"/>
+  </body>
+</html>

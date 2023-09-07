@@ -1,13 +1,20 @@
-function main() {
-  task1 = new Task('task1', 'sample description for task1','type', 'September 6th 2023', 'label')
-  task2 = new Task('task2', 'sample description for task2','type', 'September 6th 2023', 'label')
-  task3 = new Task('task3', 'sample description for task3','type', 'September 6th 2023', 'label')
-  task4 = new Task('task4', 'sample description for task4','type', 'September 6th 2023', 'label')
+// Technical Assessment
+// 9-6-23
+// Author NankeyDev
 
-  console.log(task1);
-  // console.log(task2);
-  // console.log(task3);
-  // console.log(task4);
+function main() {
+
+}
+
+function doGet(e) {
+  return HtmlService.createHtmlOutputFromFile('WebApp');
+}
+
+function AddRecord(taskName, taskdescription, tasktype, taskduedate, tasklabel) {
+  var url = 'https://docs.google.com/spreadsheets/d/1LvLY5RBwm3nUqr-GBK5C0Q8ylX8uOSaTUzJG7jAXsDc/edit#gid=0';
+  var ss = SpreadsheetApp.openByUrl(url);
+  var webAppSheet = ss.getSheetByName("Sheet1");
+  webAppSheet.appendRow([taskName, taskdescription, tasktype, taskduedate, tasklabel]);
 }
 
 class Task {
@@ -19,6 +26,3 @@ class Task {
     this.label = label;
   }
 }
-
-// main();
-
