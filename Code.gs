@@ -2,10 +2,6 @@
 // 9-6-23
 // Author NankeyDev
 
-function main() {
-
-}
-
 function doGet(e) {
   return HtmlService.createHtmlOutputFromFile('WebApp');
 }
