@@ -14,6 +14,7 @@
     <script>
       google.script.run.withSuccessHandler(viewData).getData();
 
+      // Automatically assigns label to task based on task type and task deadline
       function getLabel(taskName, type, deadline) {
         var label = "";
         let totalDays="";
@@ -90,17 +91,6 @@
         }
       }
 
-      // google.script.run.getDaysBetween(dateToday,deadline);
-
-      function printDates() {
-        let dateToday = new Date(year,month,day);
-        console.log(dateToday);
-      }
-      
-      // function validateForm(type) {
-      //   // Validates form inputs
-      // }
-
       // Resets form values   
       function clearForm() {
         document.getElementById("taskname").value = '';
@@ -109,24 +99,24 @@
         document.getElementById("taskduedate").value = '';
       }
 
+      // Pushes the form fields to the google sheet
       function submitForm() {
-        // Get form values
-        // daysBetween = "0";
+        // Get values from form fields
         taskName = document.getElementById("taskname").value;
         taskDescription = document.getElementById("taskdescription").value;
         taskType = document.getElementById("tasktype").value;
         taskDueDate = document.getElementById("taskduedate").value;
-        console.log("taskDueDate"+ taskDueDate)
         taskLabel = getLabel(taskName, taskType, taskDueDate);
 
-        // Add object information to google sheet
+        // Adds data as row in google sheet
         console.log("Task: " + taskName + ", " + taskDescription + ", " + taskType + ", " + taskDueDate + ", " + taskLabel);
         google.script.run.addRecord(taskName, taskDescription, taskType, taskDueDate, taskLabel);
-        console.log("Row added.");
 
+        // Resets the form fields
         clearForm();
       };
 
+      // Populates the task table
       function viewData(dataArray){
         $(document).ready(function(){
           $('#datatable').DataTable({
@@ -165,8 +155,7 @@
       <label for="taskduedate">Due Date:</label><br>
       <input type = "date" id="taskduedate" name="taskduedate" value="" min="1900-01-01" max="2100-12-31"/><br>
 
-      <label for="tasklabel">Label:</label><br>
-      <!-- <input type = "text" id="tasklabel" /><br> -->
+      <!-- <label for="tasklabel">Label:</label><br> -->
 
       <input type = "button" value = "Add" onclick="submitForm()"/><br>
     </form>
@@ -182,6 +171,39 @@
           </table>
         </div>
     </div> 
+
+    <br><br><br>
+    <header>
+      <h1>Setup & Instructions:</h>
+    </header>
+    <p>
+      Thank you for viewing!
+    </p>
+
+    <ul>
+      <li>Clone the public <a href="https://github.com/NankeyDev/TechnicalAssessment230906.git">GitHub Repository</a></li>
+      <li>Load project into <a href="https://script.google.com/home">Apps Script</a></li>
+      <li>Enable Google Sheets API (Apps Script main project window, Services > Add a Service > Google Sheets API)</li>
+      <li>Deploy the Web Application (Deploy > New Deployment)</li>
+    </ul>
+
+    <ul>
+      <li>The link to the sheet utilized in web application can be found in the following link: <i><a href="https://docs.google.com/spreadsheets/d/1LvLY5RBwm3nUqr-GBK5C0Q8ylX8uOSaTUzJG7jAXsDc/edit?usp=sharing">Sheet used in Application</a></i></li>
+    </ul>
+
+    <h2>Future Improvements:</h2>
+      <ul>
+        <li>Manual override of assigned label</li>
+        <li>Delete task functionality</li>
+        <li>Addition of MySQL Backend for Persistent Storage</li>
+        <li>Input Validation</li>
+        <li>Testing</li>
+        <li>Improved UI & UX</li>
+        <li>Auditing & Metadata</li>
+        <li>Improved Label Logic</li>
+        <li>Improved Processing Efficiency (label validation logic)</li>
+        <li>Improved Setup Instructions</li>
+      </ul>
 
   </body>
 </html>
