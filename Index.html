@@ -14,46 +14,76 @@
     <script>
       google.script.run.withSuccessHandler(viewData).getData();
 
-      function getLabel(type, deadline) {
+      function getLabel(taskName, type, deadline) {
         var label = "";
         let totalDays="";
-
-        // console.log(type + deadline);
         let today = new Date();
         let d = new Date(deadline);
-        // console.log("Today: " + today);
-        // console.log("Deadline: " + d);
         let difference = d-today;
-        // console.log("Time difference: " + difference);
         let daysBetween = difference / (1000 * 60 * 60 * 24);
-        // console.log("Time between: " + daysBetween);
         let numDays = Math.floor(daysBetween);
-        // console.log("Total Days " + numDays);
-        // console.log(totalDays);
+        const LABELS = {
+          p1: "URGENT",
+          p2: "POSTPONABLE",
+          p3: "NOT IMPORTANT",
+          p4: "UNLABELED"
+        }
 
         console.log("Start Label: " + label);
         switch (type) {
           case "Work":
-            label = "0LabelSample";
+            var label = LABELS.p4
+            if (numDays <= 1) {
+              label = LABELS.p1
+              console.log("Label 1: " + label);
+            } else if ((numDays <= 30) && (taskName.includes("PLO") || taskName.includes("GJL"))){
+              label = LABELS.p2
+              console.log("Label 2: " + label);
+            } else if ((numDays <= 7) &&((taskName.includes("PLO") || taskName.includes("GJL"))==false)) {
+              label = LABELS.p2
+              console.log("Label 3: " + label);
+            } else {
+              label = LABELS.p3
+              console.log("Label 4: " + label);
+            }
             console.log("Label: " + label);
             return label;
             break;
           case "Personal":
+            var label = LABELS.p4
             if (numDays <= 7) {
-              label = "POSTPONABLE"
+              label = LABELS.p2
             } else {
-              label = "NOT IMPORTANT"
+              label = LABELS.p3
             }
             console.log("Label: " + label);
             return label;
             break;
           case "Health":
-            label = "2LabelSample";
+            if ((numDays <= 3) && (taskName.includes("Treatment")==false)) {
+              label = LABELS.p1
+              console.log("Label 1: " + label);
+            } else if ((numDays <= 3) && (taskName.includes("Treatment"))) {
+              label = LABELS.p2
+              console.log("Label 2: " + label);
+            } else if (numDays<=7) {
+              label = LABELS.p2
+              console.log("Label 3: " + label);
+            } else {
+              label = LABELS.p3
+              console.log("Label 4: " + label);
+            }
             console.log("Label: " + label);
             return label;
             break;
           default:
-            label = "3LabelSample";
+            if (numDays <= 7) {
+              label = LABELS.p2
+              // Assumed 6-7 days are ok in postponable category.
+              // Unspecified in requirements.
+            } else if ((numDays >= 8) || (numDays == NULL)) {
+              label = LABELS.p3
+            }
             console.log("Label: " + label);
             return label;
             break;
@@ -87,7 +117,7 @@
         taskType = document.getElementById("tasktype").value;
         taskDueDate = document.getElementById("taskduedate").value;
         console.log("taskDueDate"+ taskDueDate)
-        taskLabel = getLabel(taskType, taskDueDate);
+        taskLabel = getLabel(taskName, taskType, taskDueDate);
 
         // Add object information to google sheet
         console.log("Task: " + taskName + ", " + taskDescription + ", " + taskType + ", " + taskDueDate + ", " + taskLabel);
