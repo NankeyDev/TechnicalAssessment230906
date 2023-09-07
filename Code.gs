@@ -3,12 +3,19 @@
 // Author NankeyDev
 
 // Variables
-var spreadsheetURL = 'https://docs.google.com/spreadsheets/d/1LvLY5RBwm3nUqr-GBK5C0Q8ylX8uOSaTUzJG7jAXsDc/edit#gid=0';
-var spreadSheetId = '1LvLY5RBwm3nUqr-GBK5C0Q8ylX8uOSaTUzJG7jAXsDc';
-var dataRange = "Sheet1!A2:E";
+const spreadsheetURL = 'https://docs.google.com/spreadsheets/d/1LvLY5RBwm3nUqr-GBK5C0Q8ylX8uOSaTUzJG7jAXsDc/edit#gid=0';
+const spreadSheetId = '1LvLY5RBwm3nUqr-GBK5C0Q8ylX8uOSaTUzJG7jAXsDc';
+const dataRange = "Sheet1!A2:E";
 
-var spreadSheet = SpreadsheetApp.openByUrl(spreadsheetURL);
-var sheet = spreadSheet.getSheetByName("Sheet1");
+const spreadSheet = SpreadsheetApp.openByUrl(spreadsheetURL);
+const sheet = spreadSheet.getSheetByName("Sheet1");
+
+// Field Variables
+let taskNameField = "";
+let taskDescriptionField = "";
+let taskTypeField = "";
+let taskDueDateField = "";
+let taskLabelField = "";
 
 // function doGet(e) {
 //   return HtmlService.createHtmlOutputFromFile('WebApp');
@@ -21,6 +28,7 @@ function doGet() {
 
 // Adds new record to google sheet (Task Information)
 function addRecord(taskName, taskdescription, tasktype, taskduedate, tasklabel) {
+  console.log("Record added: " + taskName + taskdescription + tasktype + taskduedate + tasklabel);
   sheet.appendRow([taskName, taskdescription, tasktype, taskduedate, tasklabel]);
 }
 
@@ -41,5 +49,8 @@ class Task {
     this.dueDate = dueDate;
     this.label = label;
   }
+
 }
+
+
 

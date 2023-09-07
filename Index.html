@@ -4,6 +4,7 @@
   <head>
     <base target="_top">
 
+    <!-- Linked Scripts -->
     <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
     <script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.23/js/dataTables.bootstrap4.min.js"></script>
@@ -11,23 +12,91 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.23/css/dataTables.bootstrap4.min.css">
 
     <script>
-      function addRow() {
-        // Get form values
-        var taskName = document.getElementById("taskname").value;
-        var taskDescription = document.getElementById("taskdescription").value;
-        var taskType = document.getElementById("tasktype").value;
-        var taskDueDate = document.getElementById("taskduedate").value;
-        var taskLabel = document.getElementById("tasklabel").value;
+      google.script.run.withSuccessHandler(viewData).getData();
 
-        // Add object information to google sheet
-        google.script.run.addRecord(taskName, taskDescription, taskType, taskDueDate, taskLabel);
+      function getLabel(type, deadline) {
+        var label = "";
+        let totalDays="";
 
-        // Clears form values
-        document.getElementById("taskName").value = '';
+        // console.log(type + deadline);
+        let today = new Date();
+        let d = new Date(deadline);
+        // console.log("Today: " + today);
+        // console.log("Deadline: " + d);
+        let difference = d-today;
+        // console.log("Time difference: " + difference);
+        let daysBetween = difference / (1000 * 60 * 60 * 24);
+        // console.log("Time between: " + daysBetween);
+        let numDays = Math.floor(daysBetween);
+        // console.log("Total Days " + numDays);
+        // console.log(totalDays);
+
+        console.log("Start Label: " + label);
+        switch (type) {
+          case "Work":
+            label = "0LabelSample";
+            console.log("Label: " + label);
+            return label;
+            break;
+          case "Personal":
+            if (numDays <= 7) {
+              label = "POSTPONABLE"
+            } else {
+              label = "NOT IMPORTANT"
+            }
+            console.log("Label: " + label);
+            return label;
+            break;
+          case "Health":
+            label = "2LabelSample";
+            console.log("Label: " + label);
+            return label;
+            break;
+          default:
+            label = "3LabelSample";
+            console.log("Label: " + label);
+            return label;
+            break;
+        }
       }
 
-      google.script.run.withSuccessHandler(viewData).getData();
- 
+      // google.script.run.getDaysBetween(dateToday,deadline);
+
+      function printDates() {
+        let dateToday = new Date(year,month,day);
+        console.log(dateToday);
+      }
+      
+      // function validateForm(type) {
+      //   // Validates form inputs
+      // }
+
+      // Resets form values   
+      function clearForm() {
+        document.getElementById("taskname").value = '';
+        document.getElementById("taskdescription").value = '';
+        document.getElementById("tasktype").value = '';
+        document.getElementById("taskduedate").value = '';
+      }
+
+      function submitForm() {
+        // Get form values
+        // daysBetween = "0";
+        taskName = document.getElementById("taskname").value;
+        taskDescription = document.getElementById("taskdescription").value;
+        taskType = document.getElementById("tasktype").value;
+        taskDueDate = document.getElementById("taskduedate").value;
+        console.log("taskDueDate"+ taskDueDate)
+        taskLabel = getLabel(taskType, taskDueDate);
+
+        // Add object information to google sheet
+        console.log("Task: " + taskName + ", " + taskDescription + ", " + taskType + ", " + taskDueDate + ", " + taskLabel);
+        google.script.run.addRecord(taskName, taskDescription, taskType, taskDueDate, taskLabel);
+        console.log("Row added.");
+
+        clearForm();
+      };
+
       function viewData(dataArray){
         $(document).ready(function(){
           $('#datatable').DataTable({
@@ -67,13 +136,14 @@
       <input type = "date" id="taskduedate" name="taskduedate" value="" min="1900-01-01" max="2100-12-31"/><br>
 
       <label for="tasklabel">Label:</label><br>
-      <input type = "text" id="tasklabel" /><br>
+      <!-- <input type = "text" id="tasklabel" /><br> -->
 
-      <input type = "button" value = "Add" onclick="addRow()"/><br>
+      <input type = "button" value = "Add" onclick="submitForm()"/><br>
     </form>
 
     <br>
     Current Tasks:<br>
+
     <!-- Table View of Data -->
     <div class="container">
         <br>
